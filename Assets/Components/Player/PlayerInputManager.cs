@@ -10,23 +10,27 @@ public class PlayerInputManager : MonoBehaviour
     public static PlayerInputManager Instance { get; private set; }
     //
     [Header("MovementStats")]
-    [Range(4f, 32f)] public float moveSpeed = 16f;
-    [Range(0f, 5f)] public float rotSpeed = .6f;
-    [Range(16f, 64f)] public float runSpeed = 32f;
+    [Range(2f, 32f)] public float moveSpeed = 16f;
+    [Range(0f, 35f)] public float rotSpeed = .6f;
+    [Range(4f, 64f)] public float runSpeed = 32f;
 
     [Header("ScriptsReference")]
-    public PlayerInput playerMovement;
+    public PlayerMovement playerMovement;
     public PlayerLocomotion playerLocomotion;
 
     [Header("Components")]
-    public Rigidbody rigidbody;
     public Animator animator;
+
 
     private Vector2 movementInput;
     private Vector2 velocityInput;
+    private Vector2 cameraMovement;
 
-    [SerializeField] public Vector2 normalizedInput;
-    [SerializeField] public float movementWeight;
+    [Header("InputMetadata")]
+    public Vector2 normalizedInput;
+    public Vector2 normalizedCameraMovement;
+    public float movementWeight;
+    public bool isSprint;
 
     private void Awake()
     {
@@ -43,8 +47,10 @@ public class PlayerInputManager : MonoBehaviour
     {
         if (ReferenceEquals(this.playerMovement, null))
         {
-            this.playerMovement = new PlayerInput();
-            this.playerMovement.PlayerMovement.Keyboard.performed += i => this.movementInput = i.ReadValue<Vector2>();
+            this.playerMovement = new PlayerMovement();
+            this.playerMovement.Movement.PlayerMovement.performed += i => this.movementInput = i.ReadValue<Vector2>();
+            this.playerMovement.Movement.CameraMovement.performed += i => this.cameraMovement = i.ReadValue<Vector2>();
+            this.playerMovement.Movement.Sprint.performed += i => this.isSprint = i.ReadValue<float>() > .5f;
         }
 
         this.playerMovement.Enable();
@@ -61,6 +67,7 @@ public class PlayerInputManager : MonoBehaviour
     private void OnHandleInput()
     {
         this.normalizedInput = this.movementInput;
+        this.normalizedCameraMovement = this.cameraMovement;
 
         this.movementWeight = Mathf.Clamp01(Mathf.Abs(this.normalizedInput.y) + Mathf.Abs(this.normalizedInput.x));
     }
