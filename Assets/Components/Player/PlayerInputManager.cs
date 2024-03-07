@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.InputSystem;
 
 public class PlayerInputManager : MonoBehaviour
@@ -13,6 +14,9 @@ public class PlayerInputManager : MonoBehaviour
     [Range(2f, 32f)] public float moveSpeed = 16f;
     [Range(0f, 35f)] public float rotSpeed = .6f;
     [Range(4f, 64f)] public float runSpeed = 32f;
+    [Range(1f, 100f)] public float jumpPower = 1f;
+    [Range(1f, 100f)] public float rollPower = 1f;
+    [Range(0f, 1f)] public float rollDuration = .5f;
 
     [Header("ScriptsReference")]
     public PlayerMovement playerMovement;
@@ -21,16 +25,20 @@ public class PlayerInputManager : MonoBehaviour
     [Header("Components")]
     public Animator animator;
 
-
-    private Vector2 movementInput;
-    private Vector2 velocityInput;
-    private Vector2 cameraMovement;
+    [Header("DebugInput")]
+    [SerializeField] private Vector2 movementInput;
+    [SerializeField] private Vector2 velocityInput;
+    [SerializeField] private Vector2 cameraMovement;
 
     [Header("InputMetadata")]
     public Vector2 normalizedInput;
     public Vector2 normalizedCameraMovement;
     public float movementWeight;
     public bool isSprint;
+    public bool isAiming;
+    public bool isFiring;
+    public UnityEvent jump;
+    public UnityEvent roll;
 
     private void Awake()
     {
@@ -43,6 +51,11 @@ public class PlayerInputManager : MonoBehaviour
         Instance = this;
     }
 
+    private void Jump()
+    {
+
+    }
+
     private void OnEnable()
     {
         if (ReferenceEquals(this.playerMovement, null))
@@ -51,6 +64,12 @@ public class PlayerInputManager : MonoBehaviour
             this.playerMovement.Movement.PlayerMovement.performed += i => this.movementInput = i.ReadValue<Vector2>();
             this.playerMovement.Movement.CameraMovement.performed += i => this.cameraMovement = i.ReadValue<Vector2>();
             this.playerMovement.Movement.Sprint.performed += i => this.isSprint = i.ReadValue<float>() > .5f;
+            this.playerMovement.Movement.Jump.performed += context => this.jump.Invoke();
+            this.playerMovement.Movement.Roll.performed += context => this.roll.Invoke();
+            this.playerMovement.Movement.Aim.performed += i => this.isAiming = i.ReadValue<float>() > .5f;
+            this.playerMovement.Movement.Fire.performed += i => this.isFiring = i.ReadValue<float>() > .5f && this.isAiming;
+
+            Cursor.lockState = CursorLockMode.Locked;
         }
 
         this.playerMovement.Enable();
@@ -67,7 +86,7 @@ public class PlayerInputManager : MonoBehaviour
     private void OnHandleInput()
     {
         this.normalizedInput = this.movementInput;
-        this.normalizedCameraMovement = this.cameraMovement;
+        this.normalizedCameraMovement = this.cameraMovement.normalized;
 
         this.movementWeight = Mathf.Clamp01(Mathf.Abs(this.normalizedInput.y) + Mathf.Abs(this.normalizedInput.x));
     }

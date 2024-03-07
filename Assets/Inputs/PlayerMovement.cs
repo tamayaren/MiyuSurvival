@@ -53,6 +53,42 @@ public partial class @PlayerMovement: IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Jump"",
+                    ""type"": ""Button"",
+                    ""id"": ""62ad33cd-65b5-4196-aed4-c3fa52106dae"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Roll"",
+                    ""type"": ""Button"",
+                    ""id"": ""374c3865-b03a-4b0d-a371-25c3d5af1042"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Aim"",
+                    ""type"": ""Button"",
+                    ""id"": ""8b1bace8-fbe3-47ea-8d26-aea0742e05b0"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Fire"",
+                    ""type"": ""Button"",
+                    ""id"": ""a839dc21-a330-4ffe-9c5b-abf5bc92fbaa"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -170,10 +206,54 @@ public partial class @PlayerMovement: IInputActionCollection2, IDisposable
                     ""name"": """",
                     ""id"": ""20f57121-6eac-4f4d-8dac-bb3b8b15106a"",
                     ""path"": ""<Keyboard>/leftShift"",
-                    ""interactions"": ""Hold"",
+                    ""interactions"": ""Press(behavior=2)"",
                     ""processors"": """",
                     ""groups"": """",
                     ""action"": ""Sprint"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1c1c8df3-93e5-4697-a56a-2ab27e2a7407"",
+                    ""path"": ""<Keyboard>/space"",
+                    ""interactions"": ""Tap"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Jump"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""d00f6602-f3d4-4028-87f3-501df0d5e8b8"",
+                    ""path"": ""<Keyboard>/q"",
+                    ""interactions"": ""Tap"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Roll"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""62dd4f44-1334-48f7-98d5-16469e6edf80"",
+                    ""path"": ""<Mouse>/rightButton"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Aim"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""2b5dc8d2-af39-4c72-86ee-6a311a30f18f"",
+                    ""path"": ""<Mouse>/leftButton"",
+                    ""interactions"": ""Press(behavior=2)"",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Fire"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
                 }
@@ -187,6 +267,10 @@ public partial class @PlayerMovement: IInputActionCollection2, IDisposable
         m_Movement_PlayerMovement = m_Movement.FindAction("PlayerMovement", throwIfNotFound: true);
         m_Movement_CameraMovement = m_Movement.FindAction("CameraMovement", throwIfNotFound: true);
         m_Movement_Sprint = m_Movement.FindAction("Sprint", throwIfNotFound: true);
+        m_Movement_Jump = m_Movement.FindAction("Jump", throwIfNotFound: true);
+        m_Movement_Roll = m_Movement.FindAction("Roll", throwIfNotFound: true);
+        m_Movement_Aim = m_Movement.FindAction("Aim", throwIfNotFound: true);
+        m_Movement_Fire = m_Movement.FindAction("Fire", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -251,6 +335,10 @@ public partial class @PlayerMovement: IInputActionCollection2, IDisposable
     private readonly InputAction m_Movement_PlayerMovement;
     private readonly InputAction m_Movement_CameraMovement;
     private readonly InputAction m_Movement_Sprint;
+    private readonly InputAction m_Movement_Jump;
+    private readonly InputAction m_Movement_Roll;
+    private readonly InputAction m_Movement_Aim;
+    private readonly InputAction m_Movement_Fire;
     public struct MovementActions
     {
         private @PlayerMovement m_Wrapper;
@@ -258,6 +346,10 @@ public partial class @PlayerMovement: IInputActionCollection2, IDisposable
         public InputAction @PlayerMovement => m_Wrapper.m_Movement_PlayerMovement;
         public InputAction @CameraMovement => m_Wrapper.m_Movement_CameraMovement;
         public InputAction @Sprint => m_Wrapper.m_Movement_Sprint;
+        public InputAction @Jump => m_Wrapper.m_Movement_Jump;
+        public InputAction @Roll => m_Wrapper.m_Movement_Roll;
+        public InputAction @Aim => m_Wrapper.m_Movement_Aim;
+        public InputAction @Fire => m_Wrapper.m_Movement_Fire;
         public InputActionMap Get() { return m_Wrapper.m_Movement; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -276,6 +368,18 @@ public partial class @PlayerMovement: IInputActionCollection2, IDisposable
             @Sprint.started += instance.OnSprint;
             @Sprint.performed += instance.OnSprint;
             @Sprint.canceled += instance.OnSprint;
+            @Jump.started += instance.OnJump;
+            @Jump.performed += instance.OnJump;
+            @Jump.canceled += instance.OnJump;
+            @Roll.started += instance.OnRoll;
+            @Roll.performed += instance.OnRoll;
+            @Roll.canceled += instance.OnRoll;
+            @Aim.started += instance.OnAim;
+            @Aim.performed += instance.OnAim;
+            @Aim.canceled += instance.OnAim;
+            @Fire.started += instance.OnFire;
+            @Fire.performed += instance.OnFire;
+            @Fire.canceled += instance.OnFire;
         }
 
         private void UnregisterCallbacks(IMovementActions instance)
@@ -289,6 +393,18 @@ public partial class @PlayerMovement: IInputActionCollection2, IDisposable
             @Sprint.started -= instance.OnSprint;
             @Sprint.performed -= instance.OnSprint;
             @Sprint.canceled -= instance.OnSprint;
+            @Jump.started -= instance.OnJump;
+            @Jump.performed -= instance.OnJump;
+            @Jump.canceled -= instance.OnJump;
+            @Roll.started -= instance.OnRoll;
+            @Roll.performed -= instance.OnRoll;
+            @Roll.canceled -= instance.OnRoll;
+            @Aim.started -= instance.OnAim;
+            @Aim.performed -= instance.OnAim;
+            @Aim.canceled -= instance.OnAim;
+            @Fire.started -= instance.OnFire;
+            @Fire.performed -= instance.OnFire;
+            @Fire.canceled -= instance.OnFire;
         }
 
         public void RemoveCallbacks(IMovementActions instance)
@@ -311,5 +427,9 @@ public partial class @PlayerMovement: IInputActionCollection2, IDisposable
         void OnPlayerMovement(InputAction.CallbackContext context);
         void OnCameraMovement(InputAction.CallbackContext context);
         void OnSprint(InputAction.CallbackContext context);
+        void OnJump(InputAction.CallbackContext context);
+        void OnRoll(InputAction.CallbackContext context);
+        void OnAim(InputAction.CallbackContext context);
+        void OnFire(InputAction.CallbackContext context);
     }
 }
