@@ -21,7 +21,7 @@ public class CameraRotation : MonoBehaviour
 
     private void Update()
     {
-        currentDistance = Mathf.Clamp(currentDistance + (((playerInputManager.normalizedCameraMovement.y/2) * Time.fixedDeltaTime) * (distanceMax*2)), -distanceMax, distanceMax);
+        currentDistance = Mathf.Clamp(currentDistance + (((playerInputManager.normalizedCameraMovement.y) * Time.fixedDeltaTime) * (distanceMax*2)), -distanceMax, distanceMax);
 
         transposer.m_FollowOffset.y = Mathf.Lerp(transposer.m_FollowOffset.y, currentDistance, 5 * Time.deltaTime);
     }

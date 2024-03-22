@@ -106,6 +106,7 @@ GameObject:
   - component: {fileID: -5754084199372789682}
   - component: {fileID: -7511558181221131132}
   - component: {fileID: 1559798531961805009}
+  - component: {fileID: 1860853135839066334}
   m_Layer: 0
   m_Name: AK-47
   m_TagString: Untagged
@@ -202,6 +203,23 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &1860853135839066334
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 919132149155446097}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a130898fb9fb1e84187f6441562e8168, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 4770962647492620752}
+  muzzle: {fileID: 0}
+  muzzleFire: {fileID: 0}
+  bullet: {fileID: 5645383912707465915, guid: 226773ba03b8f4a41b271ebd48e1ad83, type: 3}
+  head: {fileID: 7870573852836533447}
 --- !u!1 &1421719562668883307
 GameObject:
   m_ObjectHideFlags: 0
@@ -929,7 +947,7 @@ GameObject:
   - component: {fileID: 3683664658748017727}
   - component: {fileID: 277524322926078632}
   - component: {fileID: 8598990913992265100}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Player
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -980,6 +998,8 @@ MonoBehaviour:
   normalizedCameraMovement: {x: 0, y: 0}
   movementWeight: 0
   isSprint: 0
+  isAiming: 0
+  isFiring: 0
   jump:
     m_PersistentCalls:
       m_Calls:
@@ -1022,8 +1042,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 71931da37ebd5de469870f44ac968660, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ik: {fileID: 4615617044519913931}
-  gunAnimator: {fileID: 1559798531961805009}
   CineCamera: {fileID: 0}
   animator: {fileID: 3092789855528459026}
   moveDirection: {x: 0, y: 0, z: 0}
@@ -1614,6 +1632,7 @@ MonoBehaviour:
   Head: {fileID: 5020026176505659336}
   leftTarget: {fileID: 1965363348736610251}
   rightTarget: {fileID: 7112558698740328996}
+  eyeTarget: {fileID: 0}
 --- !u!1 &8667340026422037335
 GameObject:
   m_ObjectHideFlags: 0
